@@ -1,5 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { NgxImageZoomComponent } from 'ngx-image-zoom';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -17,15 +16,15 @@ export class AppComponent implements AfterViewInit {
     'https://wittlock.github.io/ngx-image-zoom/assets/fullres.jpg';
   rightThumbnail = 'https://wittlock.github.io/ngx-image-zoom/assets/thumb.jpg';
 
-  @ViewChild('getMirrored') getMirrored!: NgxImageZoomComponent;
-  @ViewChild('mirrored') mirrored!: NgxImageZoomComponent;
+  @ViewChild('getMirrored') getMirrored!: any;
+  @ViewChild('mirrored') mirrored!: any;
 
   magnification = 2;
 
   ngAfterViewInit(): void {
-    const mirroredDiv = document.getElementById('mirroredDiv');
-    if (mirroredDiv !== null) {
-      mirroredDiv.addEventListener('wheel', (event) => {
+    const zoomWhell = document.getElementById("mirroredDiv");
+    if(zoomWhell !== null){
+        zoomWhell.addEventListener('wheel',(event: WheelEvent)=>{
         const delta = Math.sign(event.deltaY);
         if (delta < 0 && this.magnification <= 5) {
           this.magnification += 0.5;
@@ -34,29 +33,36 @@ export class AppComponent implements AfterViewInit {
           this.magnification -= 0.5;
           this.mirrorImagePosition();
         }
-      });
+      })
     }
   }
 
   mirrorImagePosition() {
-    if (this.getMirrored != undefined && this.mirrored !== undefined) {
-      this.getMirrored.display = this.mirrored.display;
-      this.getMirrored.fullImageTop = this.mirrored.fullImageTop;
-      this.getMirrored.fullImageLeft = this.mirrored.fullImageLeft;
-      this.getMirrored.magnifiedWidth = this.mirrored.magnifiedWidth;
-      this.getMirrored.magnifiedHeight = this.mirrored.magnifiedHeight;
-      this.getMirrored.magnifiedWidth = this.mirrored.magnifiedWidth
-      this.getMirrored.magnifiedHeight = this.mirrored.magnifiedHeight
-      this.getMirrored.lensTop = this.mirrored.lensTop;
-      this.getMirrored.lensLeft = this.mirrored.lensLeft;
-      this.getMirrored.enableLens = this.mirrored.enableLens;
-      this.getMirrored.lensBorderRadius = this.mirrored.lensBorderRadius;
-      this.getMirrored.thumbWidth = this.mirrored.thumbWidth;
-      this.getMirrored.thumbHeight = this.mirrored.thumbHeight;
-      this.getMirrored.lensWidth = this.mirrored.lensWidth;
-      this.getMirrored.lensHeight = this.mirrored.lensHeight;
-      this.getMirrored.fullWidth = this.mirrored.fullWidth;
-      this.getMirrored.fullHeight = this.mirrored.fullHeight;
+    if (this.getMirrored !== undefined && this.mirrored !== undefined) {
+      const mirroredParams = [
+        'display',
+        'fullImageTop',
+        'fullImageLeft',
+        'magnifiedWidth',
+        'magnifiedHeight',
+        'lensTop',
+        'lensLeft',
+        'enableLens',
+        'lensBorderRadius',
+        'thumbWidth',
+        'thumbHeight',
+        'lensWidth',
+        'lensHeight',
+        'fullWidth',
+        'fullHeight'
+      ];
+      
+      setTimeout(() => {
+  
+        mirroredParams.forEach(key => {
+        this.getMirrored[key] = this.mirrored[key];
+        });
+      }, 0);
     }
   }
 }
